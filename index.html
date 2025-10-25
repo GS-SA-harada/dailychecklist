@@ -11,43 +11,49 @@
     }
     h1 {
       text-align: center;
-      color: #333;
+      color: #000;
+      font-weight: bold;
     }
     .checklist {
       background-color: white;
       padding: 20px;
       border-radius: 12px;
-      max-width: 420px;
+      max-width: 400px;
       margin: 0 auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .item {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      padding: 8px 4px;
-      transition: background-color 0.3s;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .item:last-child {
+      border-bottom: none;
     }
     .item-content {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      flex: 1;
-      margin-left: 6px;
+      margin-left: 8px;
     }
     .label-row {
       display: flex;
       align-items: center;
+      width: 100%;
     }
     label {
-      font-size: 16px;
+      font-size: 18px;
       margin-left: 8px;
       cursor: pointer;
+      flex: 1;
     }
     .timestamp {
       font-size: 13px;
       color: gray;
       margin-left: 26px;
-      margin-top: 2px;
+      margin-top: 3px;
       display: block;
     }
     .delete-btn {
@@ -77,16 +83,15 @@
       gap: 10px;
     }
     input[type="text"] {
-      padding: 8px;
+      padding: 10px;
       width: 100%;
-      border-radius: 6px;
+      border-radius: 4px;
       border: 1px solid #ccc;
-      font-size: 14px;
-      margin-bottom: 10px;
+      font-size: 15px;
     }
     button {
-      padding: 10px;
-      font-size: 14px;
+      padding: 12px;
+      font-size: 15px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -101,8 +106,8 @@
   </style>
 </head>
 <body>
-  <h1>日常チェックリスト</h1>
-  <div class="checklist" id="checklist">
+  <div class="checklist">
+    <h1>日常チェックリスト</h1>
     <div class="item" id="item-lock">
       <div class="item-content">
         <div class="label-row">
@@ -133,12 +138,12 @@
       </div>
       <button class="delete-btn" onclick="deleteItem('light')">×</button>
     </div>
-  </div>
 
-  <div class="add-item">
-    <input type="text" id="newItemText" placeholder="項目名を入力" />
-    <button onclick="addNewItem()">追加</button>
-    <button onclick="clearAllChecks()">全てのチェックをオフにする</button>
+    <div class="add-item">
+      <input type="text" id="newItemText" placeholder="新しい項目を追加" />
+      <button onclick="addNewItem()">追加</button>
+      <button onclick="clearAllChecks()">全てのチェックをオフ</button>
+    </div>
   </div>
 
   <script>
@@ -214,7 +219,7 @@
       itemDiv.appendChild(contentDiv);
       itemDiv.appendChild(deleteBtn);
 
-      checklist.appendChild(itemDiv);
+      checklist.insertBefore(itemDiv, document.querySelector('.add-item'));
 
       const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
       data[id] = { checked: false, timestamp: '', label: itemName };
@@ -291,7 +296,7 @@
 
           if (data[id].checked) itemDiv.classList.add('checked');
 
-          checklist.appendChild(itemDiv);
+          checklist.insertBefore(itemDiv, document.querySelector('.add-item'));
         } else {
           const checkbox = document.getElementById(id);
           const span = document.getElementById(id + '-time');
