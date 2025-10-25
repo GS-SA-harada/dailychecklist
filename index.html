@@ -2,23 +2,27 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>日常チェックリスト</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f5f5f5;
-      padding: 20px;
+      padding: 10px;
+      margin: 0;
     }
     h1 {
       text-align: center;
       color: #000;
       font-weight: bold;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
     }
     .checklist {
       background-color: white;
-      padding: 20px;
+      padding: 15px;
       border-radius: 12px;
-      max-width: 400px;
+      max-width: 100%;
       margin: 0 auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
@@ -44,24 +48,26 @@
       width: 100%;
     }
     label {
-      font-size: 18px;
+      font-size: 1rem;
       margin-left: 8px;
       cursor: pointer;
       flex: 1;
+      word-break: break-word;
     }
     .timestamp {
-      font-size: 13px;
+      font-size: 0.85rem;
       color: gray;
       margin-left: 26px;
       margin-top: 3px;
       display: block;
+      word-break: break-word;
     }
     .delete-btn {
       color: #d9534f;
       cursor: pointer;
       background: none;
       border: none;
-      font-size: 14px;
+      font-size: 1rem;
       width: 1em;
       height: 1em;
       line-height: 1;
@@ -87,11 +93,12 @@
       width: 100%;
       border-radius: 4px;
       border: 1px solid #ccc;
-      font-size: 15px;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
     button {
       padding: 12px;
-      font-size: 15px;
+      font-size: 1rem;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -99,9 +106,21 @@
       color: white;
       transition: background-color 0.2s;
       width: 100%;
+      box-sizing: border-box;
     }
     button:hover {
       background-color: #0056b3;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+      label {
+        font-size: 0.95rem;
+      }
+      .timestamp {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
