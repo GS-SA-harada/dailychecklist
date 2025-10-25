@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>日常チェックリスト</title>
+  <title>チェックリスト</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -126,17 +126,7 @@
 </head>
 <body>
   <div class="checklist" id="checklist">
-    <h1>日常チェックリスト</h1>
-    <div class="item" id="item-lock">
-      <div class="item-content">
-        <div class="label-row">
-          <input type="checkbox" id="lock" onchange="updateTimestamp('lock')" />
-          <label for="lock">鍵の施錠</label>
-        </div>
-        <span id="lock-time" class="timestamp"></span>
-      </div>
-      <button class="delete-btn" onclick="deleteItem('lock')">×</button>
-    </div>
+    <h1>チェックリスト</h1>
     <div class="item" id="item-window">
       <div class="item-content">
         <div class="label-row">
@@ -151,11 +141,71 @@
       <div class="item-content">
         <div class="label-row">
           <input type="checkbox" id="light" onchange="updateTimestamp('light')" />
-          <label for="light">部屋の消灯</label>
+          <label for="light">部屋の電気</label>
         </div>
         <span id="light-time" class="timestamp"></span>
       </div>
       <button class="delete-btn" onclick="deleteItem('light')">×</button>
+    </div>
+    <div class="item" id="item-bedroom">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="bedroom" onchange="updateTimestamp('bedroom')" />
+          <label for="bedroom">寝室の扉</label>
+        </div>
+        <span id="bedroom-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('bedroom')">×</button>
+    </div>
+    <div class="item" id="item-echo">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="echo" onchange="updateTimestamp('echo')" />
+          <label for="echo">Amazonエコー（動画）</label>
+        </div>
+        <span id="echo-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('echo')">×</button>
+    </div>
+    <div class="item" id="item-camera">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="camera" onchange="updateTimestamp('camera')" />
+          <label for="camera">カメラ（ものの確認）</label>
+        </div>
+        <span id="camera-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('camera')">×</button>
+    </div>
+    <div class="item" id="item-water">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="water" onchange="updateTimestamp('water')" />
+          <label for="water">ももの水</label>
+        </div>
+        <span id="water-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('water')">×</button>
+    </div>
+    <div class="item" id="item-bathdoor">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="bathdoor" onchange="updateTimestamp('bathdoor')" />
+          <label for="bathdoor">お風呂のドア</label>
+        </div>
+        <span id="bathdoor-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('bathdoor')">×</button>
+    </div>
+    <div class="item" id="item-sofa">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="sofa" onchange="updateTimestamp('sofa')" />
+          <label for="sofa">ソファーの座布団</label>
+        </div>
+        <span id="sofa-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('sofa')">×</button>
     </div>
 
     <div class="add-item">
