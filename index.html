@@ -4,48 +4,164 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>日常チェックリスト</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      padding: 10px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #000;
+      font-weight: bold;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+    }
+    .checklist {
+      background-color: white;
+      padding: 15px;
+      border-radius: 12px;
+      max-width: 100%;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .item:last-child {
+      border-bottom: none;
+    }
+    .item-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 8px;
+    }
+    .label-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    label {
+      font-size: 1rem;
+      margin-left: 8px;
+      cursor: pointer;
+      flex: 1;
+      word-break: break-word;
+    }
+    .timestamp {
+      font-size: 0.85rem;
+      color: gray;
+      margin-left: 26px;
+      margin-top: 3px;
+      display: block;
+      word-break: break-word;
+    }
+    .delete-btn {
+      color: #d9534f;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      text-align: center;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .delete-btn:hover {
+      color: #a94442;
+    }
+    .checked {
+      background-color: #f0f8f0;
+    }
+    .add-item, .clear-all {
+      margin-top: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+      label {
+        font-size: 0.95rem;
+      }
+      .timestamp {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-md bg-white shadow-lg rounded-xl p-6">
-    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">日常チェックリスト</h1>
-    <div id="checklist" class="space-y-4">
-      <div id="item-lock" class="flex items-start justify-between border-b pb-3">
-        <div class="flex flex-col flex-1 ml-2">
-          <div class="flex items-center">
-            <input type="checkbox" id="lock" onchange="updateTimestamp('lock')" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200" />
-            <label for="lock" class="ml-3 text-lg text-gray-700">鍵の施錠</label>
-          </div>
-          <span id="lock-time" class="text-sm text-gray-500 ml-8 mt-1"></span>
+<body>
+  <div class="checklist" id="checklist">
+    <h1>日常チェックリスト</h1>
+    <div class="item" id="item-lock">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="lock" onchange="updateTimestamp('lock')" />
+          <label for="lock">鍵の施錠</label>
         </div>
-        <button class="text-red-500 hover:text-red-700 ml-2" onclick="deleteItem('lock')">×</button>
+        <span id="lock-time" class="timestamp"></span>
       </div>
-      <div id="item-window" class="flex items-start justify-between border-b pb-3">
-        <div class="flex flex-col flex-1 ml-2">
-          <div class="flex items-center">
-            <input type="checkbox" id="window" onchange="updateTimestamp('window')" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200" />
-            <label for="window" class="ml-3 text-lg text-gray-700">窓の施錠</label>
-          </div>
-          <span id="window-time" class="text-sm text-gray-500 ml-8 mt-1"></span>
+      <button class="delete-btn" onclick="deleteItem('lock')">×</button>
+    </div>
+    <div class="item" id="item-window">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="window" onchange="updateTimestamp('window')" />
+          <label for="window">窓の施錠</label>
         </div>
-        <button class="text-red-500 hover:text-red-700 ml-2" onclick="deleteItem('window')">×</button>
+        <span id="window-time" class="timestamp"></span>
       </div>
-      <div id="item-light" class="flex items-start justify-between border-b pb-3">
-        <div class="flex flex-col flex-1 ml-2">
-          <div class="flex items-center">
-            <input type="checkbox" id="light" onchange="updateTimestamp('light')" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200" />
-            <label for="light" class="ml-3 text-lg text-gray-700">部屋の消灯</label>
-          </div>
-          <span id="light-time" class="text-sm text-gray-500 ml-8 mt-1"></span>
+      <button class="delete-btn" onclick="deleteItem('window')">×</button>
+    </div>
+    <div class="item" id="item-light">
+      <div class="item-content">
+        <div class="label-row">
+          <input type="checkbox" id="light" onchange="updateTimestamp('light')" />
+          <label for="light">部屋の消灯</label>
         </div>
-        <button class="text-red-500 hover:text-red-700 ml-2" onclick="deleteItem('light')">×</button>
+        <span id="light-time" class="timestamp"></span>
       </div>
+      <button class="delete-btn" onclick="deleteItem('light')">×</button>
     </div>
 
-    <div class="mt-6 space-y-3">
-      <input type="text" id="newItemText" placeholder="新しい項目を追加" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <button onclick="addNewItem()" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">追加</button>
-      <button onclick="clearAllChecks()" class="w-full py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">全てのチェックをオフ</button>
+    <div class="add-item">
+      <input type="text" id="newItemText" placeholder="新しい項目を追加" />
+      <button onclick="addNewItem()">追加</button>
+      <button onclick="clearAllChecks()">全てのチェックをオフ</button>
     </div>
   </div>
 
@@ -68,11 +184,11 @@
         });
         timeDisplay.textContent = `（${formatted}）`;
         data[id] = { checked: true, timestamp: formatted, label: document.querySelector(`label[for='${id}']`).textContent };
-        item.classList.add('bg-green-50');
+        item.classList.add('checked');
       } else {
         timeDisplay.textContent = '';
         data[id] = { checked: false, timestamp: '', label: document.querySelector(`label[for='${id}']`).textContent };
-        item.classList.remove('bg-green-50');
+        item.classList.remove('checked');
       }
 
       localStorage.setItem('checklistData', JSON.stringify(data));
@@ -87,29 +203,27 @@
       const checklist = document.getElementById('checklist');
 
       const itemDiv = document.createElement('div');
-      itemDiv.className = 'flex items-start justify-between border-b pb-3';
+      itemDiv.className = 'item';
       itemDiv.id = 'item-' + id;
 
       const contentDiv = document.createElement('div');
-      contentDiv.className = 'flex flex-col flex-1 ml-2';
+      contentDiv.className = 'item-content';
 
       const labelRow = document.createElement('div');
-      labelRow.className = 'flex items-center';
+      labelRow.className = 'label-row';
 
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.id = id;
-      checkbox.className = 'w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200';
       checkbox.setAttribute('onchange', `updateTimestamp('${id}')`);
 
       const label = document.createElement('label');
       label.setAttribute('for', id);
       label.textContent = itemName;
-      label.className = 'ml-3 text-lg text-gray-700';
 
       const span = document.createElement('span');
       span.id = id + '-time';
-      span.className = 'text-sm text-gray-500 ml-8 mt-1';
+      span.className = 'timestamp';
 
       labelRow.appendChild(checkbox);
       labelRow.appendChild(label);
@@ -118,14 +232,14 @@
       contentDiv.appendChild(span);
 
       const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'text-red-500 hover:text-red-700 ml-2';
+      deleteBtn.className = 'delete-btn';
       deleteBtn.textContent = '×';
       deleteBtn.setAttribute('onclick', `deleteItem('${id}')`);
 
       itemDiv.appendChild(contentDiv);
       itemDiv.appendChild(deleteBtn);
 
-      checklist.appendChild(itemDiv);
+      checklist.insertBefore(itemDiv, document.querySelector('.add-item'));
 
       const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
       data[id] = { checked: false, timestamp: '', label: itemName };
@@ -151,7 +265,7 @@
         const item = document.getElementById('item-' + id);
         if (checkbox) checkbox.checked = false;
         if (span) span.textContent = '';
-        if (item) item.classList.remove('bg-green-50');
+        if (item) item.classList.remove('checked');
       }
       localStorage.setItem('checklistData', JSON.stringify(data));
     }
@@ -163,30 +277,28 @@
           const checklist = document.getElementById('checklist');
 
           const itemDiv = document.createElement('div');
-          itemDiv.className = 'flex items-start justify-between border-b pb-3';
+          itemDiv.className = 'item';
           itemDiv.id = 'item-' + id;
 
           const contentDiv = document.createElement('div');
-          contentDiv.className = 'flex flex-col flex-1 ml-2';
+          contentDiv.className = 'item-content';
 
           const labelRow = document.createElement('div');
-          labelRow.className = 'flex items-center';
+          labelRow.className = 'label-row';
 
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.id = id;
           checkbox.checked = data[id].checked;
-          checkbox.className = 'w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200';
           checkbox.setAttribute('onchange', `updateTimestamp('${id}')`);
 
           const label = document.createElement('label');
           label.setAttribute('for', id);
           label.textContent = data[id].label;
-          label.className = 'ml-3 text-lg text-gray-700';
 
           const span = document.createElement('span');
           span.id = id + '-time';
-          span.className = 'text-sm text-gray-500 ml-8 mt-1';
+          span.className = 'timestamp';
           span.textContent = data[id].timestamp ? `（${data[id].timestamp}）` : '';
 
           labelRow.appendChild(checkbox);
@@ -196,24 +308,24 @@
           contentDiv.appendChild(span);
 
           const deleteBtn = document.createElement('button');
-          deleteBtn.className = 'text-red-500 hover:text-red-700 ml-2';
+          deleteBtn.className = 'delete-btn';
           deleteBtn.textContent = '×';
           deleteBtn.setAttribute('onclick', `deleteItem('${id}')`);
 
           itemDiv.appendChild(contentDiv);
           itemDiv.appendChild(deleteBtn);
 
-          if (data[id].checked) itemDiv.classList.add('bg-green-50');
+          if (data[id].checked) itemDiv.classList.add('checked');
 
-          checklist.appendChild(itemDiv);
+          checklist.insertBefore(itemDiv, document.querySelector('.add-item'));
         } else {
           const checkbox = document.getElementById(id);
           const span = document.getElementById(id + '-time');
           const item = document.getElementById('item-' + id);
           checkbox.checked = data[id].checked;
           span.textContent = data[id].timestamp ? `（${data[id].timestamp}）` : '';
-          if (data[id].checked) item.classList.add('bg-green-50');
-          else item.classList.remove('bg-green-50');
+          if (data[id].checked) item.classList.add('checked');
+          else item.classList.remove('checked');
         }
       }
     }
