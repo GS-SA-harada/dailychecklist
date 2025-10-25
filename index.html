@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>日常チェックリスト</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .checklist {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .item {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    label {
+      font-size: 18px;
+      margin-left: 8px;
+    }
+    .timestamp {
+      font-size: 14px;
+      color: gray;
+      margin-left: 10px;
+    }
+    .delete-btn {
+      margin-left: 10px;
+      color: red;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 16px;
+    }
+    .add-item, .clear-all {
+      margin-top: 20px;
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 5px;
+      width: 60%;
+      margin-right: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>日常チェックリスト</h1>
+  <div class="checklist" id="checklist">
+    <div class="item" id="item-lock">
+      <div>
+        <input type="checkbox" id="lock" onchange="updateTimestamp('lock')" />
+        <label for="lock">鍵の施錠</label>
+        <span id="lock-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('lock')">×</button>
+    </div>
+    <div class="item" id="item-window">
+      <div>
+        <input type="checkbox" id="window" onchange="updateTimestamp('window')" />
+        <label for="window">窓の施錠</label>
+        <span id="window-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('window')">×</button>
+    </div>
+    <div class="item" id="item-light">
+      <div>
+        <input type="checkbox" id="light" onchange="updateTimestamp('light')" />
+        <label for="light">部屋の消灯</label>
+        <span id="light-time" class="timestamp"></span>
+      </div>
+      <button class="delete-btn" onclick="deleteItem('light')">×</button>
+    </div>
+  </div>
+
+  <div class="add-item">
+    <input type="text" id="newItemText" placeholder="項目名を入力" />
+    <button onclick="addNewItem()">追加</button>
+  </div>
+
+  <div class="clear-all">
+    <button onclick="clearAllChecks()">全てのチェックをオフにする</button>
+  </div>
+
+  <script>
+    function updateTimestamp(id) {
+      const checkbox = document.getElementById(id);
+      const timeDisplay = document.getElementById(id + '-time');
+      const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
+
+      if (checkbox.checked) {
+        const now = new Date();
+        const formatted = now.toLocaleString('ja-JP', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        timeDisplay.textContent = `（${formatted}）`;
+        data[id] = { checked: true, timestamp: formatted, label: document.querySelector(`label[for='${id}']`).textContent };
+      } else {
+        timeDisplay.textContent = '';
+        data[id] = { checked: false, timestamp: '', label: document.querySelector(`label[for='${id}']`).textContent };
+      }
+
+      localStorage.setItem('checklistData', JSON.stringify(data));
+    }
+
+    function addNewItem() {
+      const textInput = document.getElementById('newItemText');
+      const itemName = textInput.value.trim();
+      if (!itemName) return;
+
+      const id = 'item-' + Date.now();
+      const checklist = document.getElementById('checklist');
+
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'item';
+      itemDiv.id = 'item-' + id;
+
+      const leftDiv = document.createElement('div');
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = id;
+      checkbox.setAttribute('onchange', `updateTimestamp('${id}')`);
+
+      const label = document.createElement('label');
+      label.setAttribute('for', id);
+      label.textContent = itemName;
+
+      const span = document.createElement('span');
+      span.id = id + '-time';
+      span.className = 'timestamp';
+
+      leftDiv.appendChild(checkbox);
+      leftDiv.appendChild(label);
+      leftDiv.appendChild(span);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.textContent = '×';
+      deleteBtn.setAttribute('onclick', `deleteItem('${id}')`);
+
+      itemDiv.appendChild(leftDiv);
+      itemDiv.appendChild(deleteBtn);
+
+      checklist.appendChild(itemDiv);
+
+      const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
+      data[id] = { checked: false, timestamp: '', label: itemName };
+      localStorage.setItem('checklistData', JSON.stringify(data));
+
+      textInput.value = '';
+    }
+
+    function deleteItem(id) {
+      document.getElementById('item-' + id).remove();
+      const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
+      delete data[id];
+      localStorage.setItem('checklistData', JSON.stringify(data));
+    }
+
+    function clearAllChecks() {
+      const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
+      for (const id in data) {
+        data[id].checked = false;
+        data[id].timestamp = '';
+        const checkbox = document.getElementById(id);
+        const span = document.getElementById(id + '-time');
+        if (checkbox) checkbox.checked = false;
+        if (span) span.textContent = '';
+      }
+      localStorage.setItem('checklistData', JSON.stringify(data));
+    }
+
+    function loadChecklist() {
+      const data = JSON.parse(localStorage.getItem('checklistData') || '{}');
+      for (const id in data) {
+        if (!document.getElementById(id)) {
+          const checklist = document.getElementById('checklist');
+
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'item';
+          itemDiv.id = 'item-' + id;
+
+          const leftDiv = document.createElement('div');
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = id;
+          checkbox.checked = data[id].checked;
+          checkbox.setAttribute('onchange', `updateTimestamp('${id}')`);
+
+          const label = document.createElement('label');
+          label.setAttribute('for', id);
+          label.textContent = data[id].label;
+
+          const span = document.createElement('span');
+          span.id = id + '-time';
+          span.className = 'timestamp';
+          span.textContent = data[id].timestamp ? `（${data[id].timestamp}）` : '';
+
+          leftDiv.appendChild(checkbox);
+          leftDiv.appendChild(label);
+          leftDiv.appendChild(span);
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.textContent = '×';
+          deleteBtn.setAttribute('onclick', `deleteItem('${id}')`);
+
+          itemDiv.appendChild(leftDiv);
+          itemDiv.appendChild(deleteBtn);
+
+          checklist.appendChild(itemDiv);
+        } else {
+          const checkbox = document.getElementById(id);
+          const span = document.getElementById(id + '-time');
+          checkbox.checked = data[id].checked;
+          span.textContent = data[id].timestamp ? `（${data[id].timestamp}）` : '';
+        }
+      }
+    }
+
+    window.onload = loadChecklist;
+  </script>
+</body>
+</html>
