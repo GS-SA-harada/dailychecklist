@@ -125,7 +125,7 @@
   </style>
 </head>
 <body>
-  <div class="checklist">
+  <div class="checklist" id="checklist">
     <h1>日常チェックリスト</h1>
     <div class="item" id="item-lock">
       <div class="item-content">
@@ -225,9 +225,10 @@
       span.id = id + '-time';
       span.className = 'timestamp';
 
-      contentDiv.appendChild(labelRow);
       labelRow.appendChild(checkbox);
       labelRow.appendChild(label);
+
+      contentDiv.appendChild(labelRow);
       contentDiv.appendChild(span);
 
       const deleteBtn = document.createElement('button');
@@ -300,9 +301,10 @@
           span.className = 'timestamp';
           span.textContent = data[id].timestamp ? `（${data[id].timestamp}）` : '';
 
-          contentDiv.appendChild(labelRow);
           labelRow.appendChild(checkbox);
           labelRow.appendChild(label);
+
+          contentDiv.appendChild(labelRow);
           contentDiv.appendChild(span);
 
           const deleteBtn = document.createElement('button');
